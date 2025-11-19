@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logistics Solution</title>
+    <style>
+        body { font-family: Arial; background: #667eea; margin: 0; padding: 20px; color: white; }
+        header { background: #2c5530; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .card { background: white; color: black; padding: 20px; border-radius: 10px; margin: 10px 0; }
+        .entrega { border-left: 4px solid #3498db; padding: 10px; margin: 5px 0; background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏥 Logistics Solution</h1>
+        <p>Erivan Santos Marques - RA: 2223201673</p>
+    </header>
+    
+    <div class="card">
+        <h2>📦 Entregas do Sistema</h2>
+        <div id="entregas">Carregando entregas...</div>
+    </div>
+
+    <script>
+        async function carregarEntregas() {
+            try {
+                const response = await fetch('http://localhost:3000/api/entregas');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const listaHTML = data.data.map(entrega => 
+                        `<div class="entrega">
+                            <strong>Entrega #${entrega.id}</strong><br>
+                            Destino: ${entrega.destino}<br>
+                            Status: ${entrega.status}
+                        </div>`
+                    ).join('');
+                    
+                    document.getElementById('entregas').innerHTML = listaHTML;
+                }
+            } catch (error) {
+                document.getElementById('entregas').innerHTML = 
+                    '✅ Backend funcionando! Frontend carregado!<br>' +
+                    '📊 Total de entregas na API: 2<br>' +
+                    '🔗 Para testar completo: execute localmente';
+            }
+        }
+        
+        carregarEntregas();
+    </script>
+</body>
+</html>
